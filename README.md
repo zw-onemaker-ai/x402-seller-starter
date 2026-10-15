@@ -1,5 +1,9 @@
 # x402-seller-starter
 
+[![CI](https://github.com/zw-onemaker-ai/x402-seller-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/zw-onemaker-ai/x402-seller-starter/actions/workflows/ci.yml)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+
 **A production-hardened starter for selling APIs to AI agents — pay-per-call in USDC on Base via x402.**
 
 Most x402 examples stop at "hello world with a 402 response". This starter
