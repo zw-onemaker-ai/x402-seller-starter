@@ -1,0 +1,26 @@
+# Serving a paid x402 API behind nginx — hardened example.
+# Key lesson: 402 challenges carry rich metadata (base64), and nginx's
+# DEFAULT 4KB proxy buffer silently truncates large challenges. Buyers
+# then fail to parse them — while direct-to-origin tests pass fine and
+# mislead you for hours. Raise the buffers.
+server {
+    server_name api.example.com;
+
+    location / {
+        proxy_buffer_size          32k;
+        proxy_buffers              8 32k;
+        proxy_busy_buffers_size    64k;
+
+        proxy_pass http://127.0.0.1:4021;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+    }
+
+    # TLS via certbot: certbot --nginx -d api.example.com
+    # After any change: nginx -t && systemctl reload nginx
+    # Verify with: node scripts/preflight.mjs https://api.example.com
+}
